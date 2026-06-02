@@ -45,8 +45,8 @@ class ScheduleController extends Controller
             ->get();
 
         $grouped     = $schedules->groupBy(fn($s) => $s->schedule_date->format('Y-m-d'));
-        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $mon, $year);
-        $firstDay    = date('N', mktime(0, 0, 0, $mon, 1, $year));
+        $daysInMonth = (int) (new \DateTime("{$year}-{$mon}-01"))->format('t');
+        $firstDay    = (int) (new \DateTime("{$year}-{$mon}-01"))->format('N');
 
         return view('schedules.index', compact(
             'schedules', 'grouped', 'staffRecords',
@@ -129,8 +129,8 @@ class ScheduleController extends Controller
                 ->get();
         }
 
-        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $mon, $year);
-        $firstDay    = date('N', mktime(0, 0, 0, $mon, 1, $year));
+        $daysInMonth = (int) (new \DateTime("{$year}-{$mon}-01"))->format('t');
+        $firstDay    = (int) (new \DateTime("{$year}-{$mon}-01"))->format('N');
 
         return view('schedules.mine', compact(
             'schedules', 'grouped', 'upcoming', 'staffRecord',
