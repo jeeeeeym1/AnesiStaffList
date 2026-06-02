@@ -136,8 +136,8 @@
     </div>
 
     <nav>
-        {{-- Dashboard: admin + manager only --}}
-        @if(in_array(Auth::user()->role, ['admin','manager']))
+        {{-- Dashboard: admin only --}}
+        @if(Auth::user()->role === 'admin')
         <div class="nav-label">Main</div>
         <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <i class="bi bi-grid-1x2-fill"></i> Dashboard
@@ -151,29 +151,7 @@
             <i class="bi bi-people-fill"></i> User Management
         </a>
         <a href="{{ route('staff.index') }}" class="{{ request()->routeIs('staff.*') ? 'active' : '' }}">
-            <i class="bi bi-person-badge-fill"></i> Manager Records
-        </a>
-        <a href="{{ route('schedules.index') }}" class="{{ request()->routeIs('schedules.index') ? 'active' : '' }}">
-            <i class="bi bi-calendar2-week-fill"></i> Scheduling
-        </a>
-        @endif
-
-        {{-- Manager: staff + scheduling only --}}
-        @if(Auth::user()->role === 'manager')
-        <div class="nav-label">Operations</div>
-        <a href="{{ route('staff.index') }}" class="{{ request()->routeIs('staff.*') ? 'active' : '' }}">
             <i class="bi bi-person-badge-fill"></i> Staff Records
-        </a>
-        <a href="{{ route('schedules.index') }}" class="{{ request()->routeIs('schedules.index') ? 'active' : '' }}">
-            <i class="bi bi-calendar2-week-fill"></i> Scheduling
-        </a>
-        @endif
-
-        {{-- Staff: own schedule only --}}
-        @if(Auth::user()->role === 'staff')
-        <div class="nav-label">My Work</div>
-        <a href="{{ route('schedules.mine') }}" class="{{ request()->routeIs('schedules.mine') ? 'active' : '' }}">
-            <i class="bi bi-calendar-heart-fill"></i> My Schedule
         </a>
         @endif
 
@@ -196,7 +174,7 @@
                 <div class="uname">{{ Auth::user()->name }}</div>
                 <div class="urole">
                     @php
-                        $roleColors = ['admin'=>'#C8922A','manager'=>'#2D6147','staff'=>'#8A7A65'];
+                        $roleColors = ['admin'=>'#C8922A','staff'=>'#8A7A65'];
                         $rc = $roleColors[Auth::user()->role] ?? '#8A7A65';
                     @endphp
                     <span style="background:{{ $rc }};color:#fff;font-size:10px;padding:1px 7px;border-radius:20px;font-weight:600;letter-spacing:.5px;">{{ strtoupper(Auth::user()->role ?? 'STAFF') }}</span>

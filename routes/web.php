@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
@@ -33,23 +32,15 @@ Route::middleware('auth')->group(function () {
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     });
 
-    // Admin + Manager
-    Route::middleware('role:admin,manager')->group(function () {
+    // Admin only — manage staff records
+    Route::middleware('role:admin')->group(function () {
         Route::get('/staff',                  [StaffRecordController::class, 'index'])->name('staff.index');
         Route::post('/staff',                 [StaffRecordController::class, 'store'])->name('staff.store');
         Route::put('/staff/{staffRecord}',    [StaffRecordController::class, 'update'])->name('staff.update');
         Route::delete('/staff/{staffRecord}', [StaffRecordController::class, 'destroy'])->name('staff.destroy');
-
-        Route::get('/schedules',               [ScheduleController::class, 'index'])->name('schedules.index');
-        Route::post('/schedules',              [ScheduleController::class, 'store'])->name('schedules.store');
-        Route::put('/schedules/{schedule}',    [ScheduleController::class, 'update'])->name('schedules.update');
-        Route::delete('/schedules/{schedule}', [ScheduleController::class, 'destroy'])->name('schedules.destroy');
     });
 
     // All roles — own profile
     Route::get('/profile',  [ProfileController::class, 'show'])->name('profile.show');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
-
-    // Staff + manager + admin — view own schedule
-    Route::get('/my-schedule', [ScheduleController::class, 'mySchedule'])->name('schedules.mine');
 });

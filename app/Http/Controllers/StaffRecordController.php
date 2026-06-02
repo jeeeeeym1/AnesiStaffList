@@ -12,27 +12,16 @@ class StaffRecordController extends Controller
 {
     public function index()
     {
-        $authUser = Auth::user();
+        // Admin sees staff records only
+        $records = StaffRecord::with('user')
+            ->whereHas('user', fn($q) => $q->where('role', 'staff'))
+            ->latest()->paginate(10);
 
-        // Admin sees manager records; Manager sees staff records
-        if ($authUser->role === 'admin') {
-            $records = StaffRecord::with('user')
-                ->whereHas('user', fn($q) => $q->where('role', 'manager'))
-                ->latest()->paginate(10);
-        } else {
-            $records = StaffRecord::with('user')
-                ->whereHas('user', fn($q) => $q->where('role', 'staff'))
-                ->latest()->paginate(10);
-        }
-
-        return view('staff.index', compact('records', 'authUser'));
+        return view('staff.index', compact('records'));
     }
 
     public function store(Request $request)
     {
-        $authUser   = Auth::user();
-        $targetRole = $authUser->role === 'admin' ? 'manager' : 'staff';
-
         $data = $request->validate([
             'name'        => 'required|string|max:255',
             'email'       => 'required|email|unique:users,email',
@@ -51,7 +40,7 @@ class StaffRecordController extends Controller
             'name'     => $data['name'],
             'email'    => $data['email'],
             'password' => Hash::make($data['password']),
-            'role'     => $targetRole,
+            'role'     => 'staff',
         ]);
 
         StaffRecord::create([
@@ -66,7 +55,7 @@ class StaffRecordController extends Controller
             'notes'       => $data['notes'] ?? null,
         ]);
 
-        return back()->with('toast_success', ucfirst($targetRole) . ' added successfully.');
+        return back()->with('toast_success', 'Staff member added successfully.');
     }
 
     public function update(Request $request, StaffRecord $staffRecord)

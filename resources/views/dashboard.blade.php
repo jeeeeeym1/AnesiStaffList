@@ -17,20 +17,13 @@
             <div class="stat-lbl">Total Users</div>
         </div>
     </div>
-    <div class="col-6 col-md-3">
-        <div class="stat-card">
-            <div class="stat-icon" style="background:#fdf3e3;color:#C8922A;"><i class="bi bi-person-gear"></i></div>
-            <div class="stat-val">{{ $totalManagers }}</div>
-            <div class="stat-lbl">Managers</div>
-        </div>
-    </div>
     @endif
 
     <div class="col-6 col-md-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:#e6f4ea;color:#2e7d32;"><i class="bi bi-person-check-fill"></i></div>
             <div class="stat-val">{{ $activeStaff }}</div>
-            <div class="stat-lbl">Active {{ $role === 'admin' ? 'Staff' : 'Staff' }}</div>
+            <div class="stat-lbl">Active Staff</div>
         </div>
     </div>
     <div class="col-6 col-md-3">
@@ -40,16 +33,6 @@
             <div class="stat-lbl">On Leave</div>
         </div>
     </div>
-
-    @if($role === 'manager')
-    <div class="col-6 col-md-3">
-        <div class="stat-card">
-            <div class="stat-icon" style="background:#e8f0eb;color:#1B3A2D;"><i class="bi bi-person-badge-fill"></i></div>
-            <div class="stat-val">{{ $totalStaff }}</div>
-            <div class="stat-lbl">Total Staff</div>
-        </div>
-    </div>
-    @endif
 
     @if($role === 'admin')
     <div class="col-6 col-md-3">
@@ -69,7 +52,7 @@
             <div class="table-card-header px-0 pt-0">
                 <h6>
                     <i class="bi bi-bar-chart-fill me-2" style="color:#1B3A2D;"></i>
-                    {{ $role === 'admin' ? 'User Registrations' : 'Staff Added' }} (Last 6 Months)
+                    User Registrations (Last 6 Months)
                 </h6>
             </div>
             <canvas id="usersChart" height="120"></canvas>
@@ -95,7 +78,7 @@
     </div>
     @endif
 
-    <div class="{{ $role === 'admin' ? 'col-md-7' : 'col-12' }}">
+    <div class="col-md-7">
         <div class="table-card p-3">
             <div class="table-card-header px-0 pt-0">
                 <h6><i class="bi bi-diagram-3-fill me-2" style="color:#1B3A2D;"></i>Staff by Department</h6>
@@ -104,52 +87,6 @@
         </div>
     </div>
 </div>
-
-{{-- ── UPCOMING SCHEDULES ── --}}
-@if($upcomingSchedules->count())
-<div class="table-card">
-    <div class="table-card-header">
-        <h6><i class="bi bi-calendar-week-fill me-2" style="color:#C8922A;"></i>Upcoming Schedules (Next 7 Days)</h6>
-        <a href="{{ route('schedules.index') }}" class="btn btn-sm btn-forest">View All</a>
-    </div>
-    <div class="table-responsive">
-        <table class="table table-hover mb-0 align-middle">
-            <thead style="background:#f8f4ee;">
-                <tr>
-                    <th class="ps-3">Date</th>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Shift</th>
-                    <th>Time</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($upcomingSchedules as $s)
-                @php $isToday = $s->schedule_date->format('Y-m-d') === now()->toDateString(); @endphp
-                <tr style="{{ $isToday ? 'background:#fffbf0;' : '' }}">
-                    <td class="ps-3">
-                        <div style="font-weight:600;font-size:13px;">
-                            {{ $s->schedule_date->format('M d') }}
-                            @if($isToday)<span class="badge ms-1" style="background:#C8922A;color:#fff;font-size:10px;">Today</span>@endif
-                        </div>
-                        <div style="font-size:11px;color:#8A7A65;">{{ $s->schedule_date->format('l') }}</div>
-                    </td>
-                    <td style="font-weight:500;">{{ $s->staffRecord->user->name }}</td>
-                    <td style="font-size:13px;color:#8A7A65;">{{ $s->staffRecord->position }}</td>
-                    <td>
-                        @php $sc = $s->shift === 'Morning' ? '#e8f5e9:#2e7d32' : '#fff8e1:#f57f17'; [$bg,$fg] = explode(':', $sc); @endphp
-                        <span class="badge" style="background:{{ $bg }};color:{{ $fg }};">{{ $s->shift }}</span>
-                    </td>
-                    <td style="font-size:13px;">
-                        {{ \Carbon\Carbon::parse($s->time_in)->format('g:i A') }} – {{ \Carbon\Carbon::parse($s->time_out)->format('g:i A') }}
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-</div>
-@endif
 
 @endsection
 

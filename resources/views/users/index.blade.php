@@ -45,7 +45,7 @@
                     <td style="font-size:13px;">{{ $user->email }}</td>
                     <td>
                         @php
-                            $rc = ['admin'=>'#C8922A','manager'=>'#1B3A2D','staff'=>'#8A7A65'][$user->role] ?? '#8A7A65';
+                            $rc = ['admin'=>'#C8922A','staff'=>'#8A7A65'][$user->role] ?? '#8A7A65';
                         @endphp
                         <span class="badge" style="background:{{ $rc }}22;color:{{ $rc }};border:1px solid {{ $rc }}44;">
                             {{ ucfirst($user->role ?? 'staff') }}
@@ -118,13 +118,12 @@
                             <select name="role" id="addRole" class="form-select" required>
                                 <option value="" disabled selected>— Select role —</option>
                                 <option value="admin">Admin</option>
-                                <option value="manager">Manager</option>
                                 <option value="staff">Staff</option>
                             </select>
                         </div>
                     </div>
 
-                    {{-- Employment Details — shown only for manager/staff --}}
+                    {{-- Employment Details — shown only for staff --}}
                     <div id="employmentSection" style="display:none;">
                         <p class="fw-semibold mb-2" style="font-size:13px;color:#1B3A2D;border-bottom:1px solid #DDD3C0;padding-bottom:6px;">
                             <i class="bi bi-person-badge-fill me-1"></i> Employment Details
@@ -206,7 +205,6 @@
                         <select name="role" id="editRole" class="form-select" required>
                             <option value="staff">Staff</option>
                             <option value="admin">Admin</option>
-                            <option value="manager">Manager</option>
                         </select>
                     </div>
                 </div>
@@ -246,7 +244,7 @@
 <script>
 // Show/hide employment section based on role selection
 document.getElementById('addRole').addEventListener('change', function () {
-    const show = this.value === 'manager' || this.value === 'staff';
+    const show = this.value === 'staff';
     const section = document.getElementById('employmentSection');
     section.style.display = show ? '' : 'none';
     // Toggle required on key fields

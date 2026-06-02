@@ -144,7 +144,6 @@
                 <select id="role" name="role" class="select-input {{ $errors->has('role') ? 'is-invalid' : '' }}" required>
                     <option value="" disabled {{ old('role') ? '' : 'selected' }}>— Select a role —</option>
                     <option value="admin"   {{ old('role') === 'admin'   ? 'selected' : '' }}>Admin</option>
-                    <option value="manager" {{ old('role') === 'manager' ? 'selected' : '' }}>Manager</option>
                     <option value="staff"   {{ old('role') === 'staff'   ? 'selected' : '' }}>Staff</option>
                 </select>
                 <span class="select-arrow">

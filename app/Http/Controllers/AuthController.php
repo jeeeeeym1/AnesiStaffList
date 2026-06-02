@@ -23,10 +23,6 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            $role = Auth::user()->role;
-            if ($role === 'staff') {
-                return redirect()->route('schedules.mine');
-            }
             return redirect()->route('dashboard');
         }
 
@@ -44,7 +40,7 @@ class AuthController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users',
             'password' => 'required|min:8|confirmed',
-            'role'     => 'required|in:admin,manager,staff',
+            'role'     => 'required|in:admin,staff',
         ]);
 
         User::create([

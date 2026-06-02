@@ -21,13 +21,13 @@ class UserController extends Controller
             'name'        => 'required|string|max:255',
             'email'       => 'required|email|unique:users',
             'password'    => 'required|min:8',
-            'role'        => 'required|in:admin,manager,staff',
-            // employment fields — required only for manager/staff
-            'employee_id' => 'required_if:role,manager,staff|nullable|string|unique:staff_records',
-            'position'    => 'required_if:role,manager,staff|nullable|string|max:255',
-            'department'  => 'required_if:role,manager,staff|nullable|string|max:255',
-            'branch'      => 'required_if:role,manager,staff|nullable|string|max:255',
-            'hire_date'   => 'required_if:role,manager,staff|nullable|date',
+            'role'        => 'required|in:admin,staff',
+            // employment fields — required only for staff
+            'employee_id' => 'required_if:role,staff|nullable|string|unique:staff_records',
+            'position'    => 'required_if:role,staff|nullable|string|max:255',
+            'department'  => 'required_if:role,staff|nullable|string|max:255',
+            'branch'      => 'required_if:role,staff|nullable|string|max:255',
+            'hire_date'   => 'required_if:role,staff|nullable|date',
             'salary'      => 'nullable|numeric|min:0',
             'status'      => 'nullable|in:active,inactive,on_leave',
         ]);
@@ -39,8 +39,8 @@ class UserController extends Controller
             'role'     => $data['role'],
         ]);
 
-        // Auto-create staff record for manager or staff roles
-        if (in_array($data['role'], ['manager', 'staff'])) {
+        // Auto-create staff record for staff role only
+        if ($data['role'] === 'staff') {
             StaffRecord::create([
                 'user_id'     => $user->id,
                 'employee_id' => $data['employee_id'],
@@ -61,7 +61,7 @@ class UserController extends Controller
         $data = $request->validate([
             'name'  => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'role'  => 'required|in:admin,manager,staff',
+            'role'  => 'required|in:admin,staff',
         ]);
 
         if ($request->filled('password')) {

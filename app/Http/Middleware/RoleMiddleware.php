@@ -17,10 +17,9 @@ class RoleMiddleware
         if (!in_array(Auth::user()->role, $roles)) {
             // Redirect each role to their own home instead of showing 403
             return match (Auth::user()->role) {
-                'staff'   => redirect()->route('schedules.mine'),
-                'manager' => redirect()->route('dashboard'),
-                'admin'   => redirect()->route('dashboard'),
-                default   => redirect()->route('login'),
+                'staff' => redirect()->route('profile.show'),
+                'admin' => redirect()->route('dashboard'),
+                default => redirect()->route('login'),
             };
         }
 

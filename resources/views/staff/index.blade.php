@@ -3,14 +3,12 @@
 @section('title', 'Staff Records — Anesi Staff System')
 @section('page-title', 'Staff Records')
 
-@php $targetLabel = $authUser->role === 'admin' ? 'Manager' : 'Staff'; @endphp
-
 @section('content')
 <div class="table-card">
     <div class="table-card-header">
-        <h6><i class="bi bi-person-badge-fill me-2"></i>{{ $targetLabel }} Records</h6>
+        <h6><i class="bi bi-person-badge-fill me-2"></i>Staff Records</h6>
         <button class="btn btn-sm btn-forest" data-bs-toggle="modal" data-bs-target="#addStaffModal">
-            <i class="bi bi-plus-lg me-1"></i> Add {{ $targetLabel }}
+            <i class="bi bi-plus-lg me-1"></i> Add Staff
         </button>
     </div>
     <div class="table-responsive">
@@ -83,7 +81,7 @@
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="9" class="text-center py-4 text-muted">No {{ strtolower($targetLabel) }} records found. Add your first one.</td></tr>
+                <tr><td colspan="9" class="text-center py-4 text-muted">No staff records found. Add your first one.</td></tr>
                 @endforelse
             </tbody>
         </table>
@@ -101,7 +99,7 @@
             <div class="modal-content">
                 <div class="modal-header" style="background:#1B3A2D;">
                     <h5 class="modal-title text-white" style="font-family:'Lora',serif;">
-                        <i class="bi bi-person-plus-fill me-2"></i>Add {{ $targetLabel }}
+                        <i class="bi bi-person-plus-fill me-2"></i>Add Staff
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
@@ -125,7 +123,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Role</label>
-                            <input type="text" class="form-control" value="{{ $targetLabel }}" disabled>
+                            <input type="text" class="form-control" value="Staff" disabled>
                         </div>
                     </div>
 
@@ -175,7 +173,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-forest">
-                        <i class="bi bi-person-check-fill me-1"></i> Create {{ $targetLabel }} Account
+                        <i class="bi bi-person-check-fill me-1"></i> Create Staff Account
                     </button>
                 </div>
             </div>
@@ -190,7 +188,7 @@
             @csrf @method('PUT')
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" style="font-family:'Lora',serif;">Edit {{ $targetLabel }} Record</h5>
+                    <h5 class="modal-title" style="font-family:'Lora',serif;">Edit Staff Record</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
