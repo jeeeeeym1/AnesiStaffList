@@ -8,21 +8,36 @@ use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
+    // Check if user has the required role to access the route
     public function handle(Request $request, Closure $next, string ...$roles): mixed
     {
+        // Check if user is logged in
         if (!Auth::check()) {
             return redirect()->route('login');
         }
 
-        if (!in_array(Auth::user()->role, $roles)) {
-            // Redirect each role to their own home instead of showing 403
-            return match (Auth::user()->role) {
-                'staff' => redirect()->route('profile.show'),
-                'admin' => redirect()->route('dashboard'),
-                default => redirect()->route('login'),
-            };
+        // Get the current user
+        $currentUser = Auth::user();
+
+        // Get the user's role
+        $userRole = $currentUser->role;
+
+        // Check if user's role is in the allowed roles
+        $hasRequiredRole = in_array($userRole, $roles);
+
+        // If user doesn't have required role, redirect based on their role
+        if (!$hasRequiredRole) {
+            // Check user's role and redirect them to their home page
+            if ($userRole === 'staff') {
+                return redirect()->route('profile.show');
+            } elseif ($userRole === 'admin') {
+                return redirect()->route('dashboard');
+            } else {
+                return redirect()->route('login');
+            }
         }
 
+        // User has required role, let them continue
         return $next($request);
     }
 }
